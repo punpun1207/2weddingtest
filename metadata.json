@@ -1,0 +1,6 @@
+{
+  "name": "Thiệp Cưới Hồng Quân & Thu Hiền",
+  "description": "Thiệp cưới điện tử Save The Date Hồng Quân & Thu Hiền - 28.11.2026 tại White Palace. Trân trọng kính mời quý khách tham dự và gửi lời chúc phúc.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
