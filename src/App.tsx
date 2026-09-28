@@ -129,6 +129,32 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
+  // IntersectionObserver for scroll-reveal animations across all sections
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            entry.target.classList.add('is-visible');
+          }
+        });
+      },
+      {
+        threshold: 0.08,
+        rootMargin: '0px 0px -40px 0px',
+      }
+    );
+
+    const revealElements = document.querySelectorAll('.reveal');
+    revealElements.forEach((el) => observer.observe(el));
+
+    return () => {
+      revealElements.forEach((el) => observer.unobserve(el));
+      observer.disconnect();
+    };
+  }, [showEnvelope]);
+
   // Gallery Photos
   const galleryImages = [
     {
@@ -438,10 +464,10 @@ export default function App() {
 
         {/* Hero typography */}
         <div className="relative z-10 px-4 max-w-xl mx-auto flex flex-col items-center text-white">
-          <p className="font-sans text-xs sm:text-sm tracking-[0.35em] uppercase text-amber-200/90 font-medium mb-3 drop-shadow">
+          <p className="font-sans text-xs sm:text-sm tracking-[0.35em] uppercase text-amber-200/90 font-medium mb-3 drop-shadow reveal">
             Save The Date
           </p>
-          <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight uppercase drop-shadow-lg leading-tight">
+          <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight uppercase drop-shadow-lg leading-tight reveal delay-100">
             HỒNG QUÂN <br />
             <span className="font-script text-5xl sm:text-7xl font-normal text-amber-200 lowercase tracking-normal block -my-2 sm:-my-4">
               &amp;
@@ -449,7 +475,7 @@ export default function App() {
             THU HIỀN
           </h1>
 
-          <div className="mt-5 flex items-center justify-center gap-3 text-sm sm:text-base font-serif tracking-widest text-white/95 border-t border-b border-amber-200/40 py-2.5 px-6">
+          <div className="mt-5 flex items-center justify-center gap-3 text-sm sm:text-base font-serif tracking-widest text-white/95 border-t border-b border-amber-200/40 py-2.5 px-6 reveal delay-200">
             <span>16:00</span>
             <span>•</span>
             <span className="font-bold text-amber-200 text-lg">28 . 11 . 2026</span>
@@ -457,12 +483,12 @@ export default function App() {
             <span>THỨ BẢY</span>
           </div>
 
-          <p className="font-serif italic text-amber-100/90 text-sm mt-3 tracking-wide">
+          <p className="font-serif italic text-amber-100/90 text-sm mt-3 tracking-wide reveal delay-300">
             (Tức ngày 20 tháng 10 năm Bính Ngọ)
           </p>
 
           {/* Countdown timer / Milestone counter */}
-          <div className="mt-8 bg-black/35 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-white/15 w-full max-w-md shadow-2xl">
+          <div className="mt-8 bg-black/35 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-white/15 w-full max-w-md shadow-2xl reveal delay-300">
             <div className="text-[11px] uppercase tracking-[0.25em] text-amber-200 font-sans mb-3 font-semibold">
               {countdown.isPast ? 'Ngày chung đôi thiêng liêng' : 'Đếm ngược đến ngày hạnh phúc'}
             </div>
@@ -508,8 +534,9 @@ export default function App() {
           </div>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="relative z-10 mt-10 flex flex-col items-center gap-1.5 text-white/75 text-xs uppercase tracking-[0.2em]">
+        {/* Scroll indicator with drip animation from Duc Manh */}
+        <div className="relative z-10 mt-10 flex flex-col items-center gap-2 text-white/75 text-xs uppercase tracking-[0.2em] reveal delay-400">
+          <div className="w-[1.5px] h-8 bg-gradient-to-b from-white/90 to-transparent animate-drip" />
           <span>Cuộn xuống</span>
           <ChevronDown className="w-4 h-4 animate-bounce text-amber-200" />
         </div>
@@ -523,28 +550,28 @@ export default function App() {
         <img
           src="/images/hoa-rum.png"
           alt="Decor"
-          className="absolute -right-8 top-10 w-28 opacity-25 pointer-events-none"
+          className="absolute -right-8 top-10 w-28 opacity-25 pointer-events-none reveal delay-200"
         />
 
         <div className="max-w-xl mx-auto text-center">
           {/* Monogram */}
-          <div className="font-display text-5xl sm:text-6xl text-[#7A1C29] font-bold tracking-wider">
+          <div className="font-display text-5xl sm:text-6xl text-[#7A1C29] font-bold tracking-wider reveal">
             Q <span className="font-script text-5xl sm:text-6xl text-[#C48B92] font-normal mx-0.5">&amp;</span> H
           </div>
-          <p className="font-serif italic text-base sm:text-lg text-[#3A2A2B]/85 mt-4 max-w-md mx-auto leading-relaxed">
+          <p className="font-serif italic text-base sm:text-lg text-[#3A2A2B]/85 mt-4 max-w-md mx-auto leading-relaxed reveal delay-100">
             “We step into a new chapter together, hand in hand, ready to build our home and embrace a lifetime of love.”
           </p>
-          <p className="font-serif text-sm text-[#7A1C29] font-semibold mt-2">
+          <p className="font-serif text-sm text-[#7A1C29] font-semibold mt-2 reveal delay-200">
             — Bước vào một chương mới, cùng nắm tay xây đắp tổ ấm trọn vẹn —
           </p>
 
           {/* 3 Photos Gallery with "28 11 26" */}
-          <div className="relative mt-10 grid grid-cols-3 gap-2.5 sm:gap-4">
+          <div className="relative mt-10 grid grid-cols-3 gap-2.5 sm:gap-4 reveal delay-300">
             {[galleryImages[1], galleryImages[2], galleryImages[3]].map((img, idx) => (
               <div
                 key={idx}
                 onClick={() => setLightboxIndex(idx + 1)}
-                className="group relative aspect-1/2 rounded-xl overflow-hidden shadow-lg border border-[#7A1C29]/15 cursor-pointer"
+                className="group relative aspect-1/2 rounded-xl overflow-hidden shadow-lg border border-[#7A1C29]/15 cursor-pointer transform hover:-translate-y-1 transition-all duration-500"
               >
                 <img
                   src={img.src}
@@ -562,7 +589,7 @@ export default function App() {
               <span>26</span>
             </div>
           </div>
-          <p className="text-xs text-stone-500 italic mt-3">Chạm vào ảnh để phóng to xem rõ nét</p>
+          <p className="text-xs text-stone-500 italic mt-3 reveal delay-300">Chạm vào ảnh để phóng to xem rõ nét</p>
         </div>
       </section>
 
@@ -574,14 +601,14 @@ export default function App() {
         className="py-16 sm:py-20 px-4 bg-[#F3EFEA] border-y border-[#7A1C29]/10 relative"
       >
         <div className="max-w-xl mx-auto text-center">
-          <p className="font-sans text-xs tracking-[0.3em] uppercase text-[#7A1C29] font-semibold">
+          <p className="font-sans text-xs tracking-[0.3em] uppercase text-[#7A1C29] font-semibold reveal">
             Save Our Date
           </p>
-          <h2 className="font-script text-5xl sm:text-6xl text-[#7A1C29] mt-1">November</h2>
-          <p className="text-xs uppercase tracking-widest text-stone-500 font-sans mt-0.5">Năm 2026</p>
+          <h2 className="font-script text-5xl sm:text-6xl text-[#7A1C29] mt-1 reveal delay-100">November</h2>
+          <p className="text-xs uppercase tracking-widest text-stone-500 font-sans mt-0.5 reveal delay-100">Năm 2026</p>
 
           {/* Calendar Grid for November 2026 (Nov 1 is Sunday) */}
-          <div className="mt-8 max-w-xs mx-auto bg-white p-6 rounded-2xl shadow-md border border-[#7A1C29]/15">
+          <div className="mt-8 max-w-xs mx-auto bg-white p-6 rounded-2xl shadow-md border border-[#7A1C29]/15 reveal delay-200">
             <div className="grid grid-cols-7 text-center text-xs font-serif gap-y-3 font-semibold text-stone-600">
               <div className="text-[#C48B92]">HAI</div>
               <div className="text-[#C48B92]">BA</div>
@@ -667,7 +694,7 @@ export default function App() {
           </div>
 
           {/* Parents Section from Duc Manh */}
-          <div className="mt-12 grid grid-cols-2 gap-4 max-w-md mx-auto text-center">
+          <div className="mt-12 grid grid-cols-2 gap-4 max-w-md mx-auto text-center reveal delay-300">
             <div className="p-4 rounded-xl bg-white/70 border border-[#7A1C29]/10 shadow-sm">
               <h4 className="font-serif font-bold text-[#7A1C29] text-base tracking-wide uppercase mb-1">
                 NHÀ GÁI
@@ -698,10 +725,10 @@ export default function App() {
       ======================================================== */}
       <section className="py-16 sm:py-24 px-4 text-center">
         <div className="max-w-xl mx-auto">
-          <p className="text-xs uppercase tracking-[0.3em] text-[#7A1C29] font-medium font-sans">
+          <p className="text-xs uppercase tracking-[0.3em] text-[#7A1C29] font-medium font-sans reveal">
             Trân trọng báo tin lễ thành hôn của
           </p>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#7A1C29] mt-2 tracking-wide">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#7A1C29] mt-2 tracking-wide reveal delay-100">
             HỒNG QUÂN <br />
             <span className="font-script text-4xl sm:text-5xl text-[#C48B92] font-normal block my-1">
               &amp;
@@ -709,7 +736,7 @@ export default function App() {
             THU HIỀN
           </h2>
 
-          <div className="my-8 py-6 px-4 bg-white/80 rounded-2xl border border-[#7A1C29]/15 shadow-sm">
+          <div className="my-8 py-6 px-4 bg-white/80 rounded-2xl border border-[#7A1C29]/15 shadow-sm reveal delay-200">
             <p className="font-serif font-bold text-lg sm:text-xl text-[#7A1C29] tracking-wider">
               16:00 • THỨ BẢY
             </p>
@@ -730,7 +757,7 @@ export default function App() {
           </div>
 
           {/* Venue Card from Duc Manh */}
-          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-[#7A1C29]/20 shadow-md">
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-[#7A1C29]/20 shadow-md reveal delay-300">
             <p className="text-xs uppercase tracking-[0.2em] text-stone-500 font-sans">
               Hôn lễ được tổ chức tại
             </p>
@@ -780,17 +807,17 @@ export default function App() {
         <img
           src="/images/hoa-rum.png"
           alt="Hoa rum decor"
-          className="absolute -top-6 -right-6 w-32 opacity-20 pointer-events-none"
+          className="absolute -top-6 -right-6 w-32 opacity-20 pointer-events-none reveal delay-300"
         />
 
         <div className="max-w-xl mx-auto">
-          <h2 className="font-script text-5xl sm:text-6xl text-[#7A1C29] text-center mb-10">
+          <h2 className="font-script text-5xl sm:text-6xl text-[#7A1C29] text-center mb-10 reveal">
             Timeline
           </h2>
 
           <div className="relative max-w-sm mx-auto py-4">
             {/* 14:00 - Left: RƯỚC DÂU */}
-            <div className="relative w-1/2 pr-8 text-right border-r-2 border-[#7A1C29] pb-12">
+            <div className="relative w-1/2 pr-8 text-right border-r-2 border-[#7A1C29] pb-12 reveal delay-100">
               <div className="absolute top-1 -right-[7px] w-3 h-3 rounded-full bg-[#7A1C29] ring-4 ring-[#F3EFEA]" />
               <div className="font-display text-xl sm:text-2xl font-bold text-[#7A1C29]">14:00</div>
               <div className="font-serif font-bold text-sm tracking-wider uppercase text-stone-900 mt-1">
@@ -801,7 +828,7 @@ export default function App() {
             </div>
 
             {/* 17:00 - Right: LỄ THÀNH HÔN */}
-            <div className="relative w-1/2 ml-auto pl-8 text-left border-l-2 border-[#7A1C29] pb-12 -mt-2">
+            <div className="relative w-1/2 ml-auto pl-8 text-left border-l-2 border-[#7A1C29] pb-12 -mt-2 reveal delay-200">
               <div className="absolute top-1 -left-[7px] w-3 h-3 rounded-full bg-[#7A1C29] ring-4 ring-[#F3EFEA]" />
               <div className="font-display text-xl sm:text-2xl font-bold text-[#7A1C29]">17:00</div>
               <div className="font-serif font-bold text-sm tracking-wider uppercase text-stone-900 mt-1">
@@ -812,7 +839,7 @@ export default function App() {
             </div>
 
             {/* 17:30 - Left: KHAI TIỆC */}
-            <div className="relative w-1/2 pr-8 text-right border-r-2 border-[#7A1C29] pb-12 -mt-2">
+            <div className="relative w-1/2 pr-8 text-right border-r-2 border-[#7A1C29] pb-12 -mt-2 reveal delay-300">
               <div className="absolute top-1 -right-[7px] w-3 h-3 rounded-full bg-[#7A1C29] ring-4 ring-[#F3EFEA]" />
               <div className="font-display text-xl sm:text-2xl font-bold text-[#7A1C29]">17:30</div>
               <div className="font-serif font-bold text-sm tracking-wider uppercase text-stone-900 mt-1">
@@ -823,7 +850,7 @@ export default function App() {
             </div>
 
             {/* 19:00 - Right: ÂM NHẠC */}
-            <div className="relative w-1/2 ml-auto pl-8 text-left border-l-2 border-transparent pb-4 -mt-2">
+            <div className="relative w-1/2 ml-auto pl-8 text-left border-l-2 border-transparent pb-4 -mt-2 reveal delay-400">
               <div className="absolute top-1 -left-[7px] w-3 h-3 rounded-full bg-[#7A1C29] ring-4 ring-[#F3EFEA]" />
               <div className="font-display text-xl sm:text-2xl font-bold text-[#7A1C29]">19:00</div>
               <div className="font-serif font-bold text-sm tracking-wider uppercase text-stone-900 mt-1">
@@ -841,33 +868,33 @@ export default function App() {
       ======================================================== */}
       <section className="py-16 sm:py-24 px-4">
         <div className="max-w-xl mx-auto text-center">
-          <h2 className="font-script text-5xl sm:text-6xl text-[#7A1C29] mb-4">Dresscode</h2>
-          <p className="font-serif text-sm text-stone-600 max-w-sm mx-auto mb-6">
+          <h2 className="font-script text-5xl sm:text-6xl text-[#7A1C29] mb-4 reveal">Dresscode</h2>
+          <p className="font-serif text-sm text-stone-600 max-w-sm mx-auto mb-6 reveal delay-100">
             Để những bức ảnh kỷ niệm thêm phần hài hòa và trọn vẹn, quý khách có thể ưu tiên trang phục theo các gam màu:
           </p>
 
           {/* Swatches from Duc Manh (#7A1C29, #C48B92, #E8D8D3, #9C7664) */}
-          <div className="flex items-center justify-center gap-4 sm:gap-6 my-6">
-            <div className="flex flex-col items-center gap-1.5">
+          <div className="flex items-center justify-center gap-4 sm:gap-6 my-6 reveal delay-200">
+            <div className="flex flex-col items-center gap-1.5 transform hover:scale-110 transition-transform">
               <div className="w-12 h-12 rounded-full shadow-md border-2 border-white ring-2 ring-[#7A1C29]/30 bg-[#7A1C29]" />
               <span className="text-[10px] font-sans text-stone-600 font-medium">Đỏ Burgundy</span>
             </div>
-            <div className="flex flex-col items-center gap-1.5">
+            <div className="flex flex-col items-center gap-1.5 transform hover:scale-110 transition-transform">
               <div className="w-12 h-12 rounded-full shadow-md border-2 border-white ring-2 ring-stone-200 bg-[#C48B92]" />
               <span className="text-[10px] font-sans text-stone-600 font-medium">Hồng Đất</span>
             </div>
-            <div className="flex flex-col items-center gap-1.5">
+            <div className="flex flex-col items-center gap-1.5 transform hover:scale-110 transition-transform">
               <div className="w-12 h-12 rounded-full shadow-md border-2 border-white ring-2 ring-stone-200 bg-[#E8D8D3]" />
               <span className="text-[10px] font-sans text-stone-600 font-medium">Kem Be</span>
             </div>
-            <div className="flex flex-col items-center gap-1.5">
+            <div className="flex flex-col items-center gap-1.5 transform hover:scale-110 transition-transform">
               <div className="w-12 h-12 rounded-full shadow-md border-2 border-white ring-2 ring-stone-200 bg-[#9C7664]" />
               <span className="text-[10px] font-sans text-stone-600 font-medium">Nâu Mocha</span>
             </div>
           </div>
 
           {/* Artful Photo Collage ("OUR Moments") */}
-          <div className="mt-14 relative bg-[#F7F3EE] p-6 sm:p-8 rounded-3xl border border-[#7A1C29]/15 shadow-inner">
+          <div className="mt-14 relative bg-[#F7F3EE] p-6 sm:p-8 rounded-3xl border border-[#7A1C29]/15 shadow-inner reveal delay-300">
             <div className="absolute top-3 left-4 font-script text-3xl sm:text-4xl text-[#7A1C29]/70">
               Forever
             </div>
@@ -878,7 +905,7 @@ export default function App() {
             <div className="grid grid-cols-2 gap-4 items-center">
               <div
                 onClick={() => setLightboxIndex(4)}
-                className="aspect-3/4 rounded-2xl overflow-hidden shadow-lg border-2 border-white cursor-pointer group"
+                className="aspect-3/4 rounded-2xl overflow-hidden shadow-lg border-2 border-white cursor-pointer group transform hover:-rotate-1 transition-transform"
               >
                 <img
                   src={galleryImages[4].src}
@@ -890,7 +917,7 @@ export default function App() {
               <div className="flex flex-col gap-4">
                 <div
                   onClick={() => setLightboxIndex(5)}
-                  className="aspect-square rounded-2xl overflow-hidden shadow-lg border-2 border-white cursor-pointer group"
+                  className="aspect-square rounded-2xl overflow-hidden shadow-lg border-2 border-white cursor-pointer group transform hover:rotate-1 transition-transform"
                 >
                   <img
                     src={galleryImages[5].src}
@@ -923,13 +950,13 @@ export default function App() {
         className="py-16 sm:py-24 px-4 bg-[#FAF7F5] border-t border-[#7A1C29]/10"
       >
         <div className="max-w-xl mx-auto text-center">
-          <p className="font-sans text-xs uppercase tracking-[0.3em] text-[#7A1C29] font-semibold">
+          <p className="font-sans text-xs uppercase tracking-[0.3em] text-[#7A1C29] font-semibold reveal">
             RSVP &amp; Guestbook
           </p>
-          <h2 className="font-script text-5xl sm:text-6xl text-[#7A1C29] mt-1 mb-3">
+          <h2 className="font-script text-5xl sm:text-6xl text-[#7A1C29] mt-1 mb-3 reveal delay-100">
             Sổ Lưu Bút &amp; Xác Nhận
           </h2>
-          <p className="font-serif text-sm sm:text-base text-stone-600 mb-8 max-w-md mx-auto leading-relaxed">
+          <p className="font-serif text-sm sm:text-base text-stone-600 mb-8 max-w-md mx-auto leading-relaxed reveal delay-200">
             Vui lòng xác nhận sự tham dự của bạn để chúng mình chuẩn bị đón tiếp một cách chu đáo nhất.
             Trân trọng cảm ơn!
           </p>
@@ -937,7 +964,7 @@ export default function App() {
           {/* Form matching Duc Manh input fields */}
           <form
             onSubmit={handleSubmitWish}
-            className="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-[#7A1C29]/20 text-left space-y-4"
+            className="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-[#7A1C29]/20 text-left space-y-4 reveal delay-200"
           >
             {/* Guest Name */}
             <div>
@@ -1172,17 +1199,17 @@ export default function App() {
       ======================================================== */}
       <footer className="relative py-16 px-4 bg-[#32070D] text-white text-center overflow-hidden">
         <div className="max-w-md mx-auto relative z-10">
-          <p className="font-serif text-sm sm:text-base text-stone-300 leading-relaxed">
+          <p className="font-serif text-sm sm:text-base text-stone-300 leading-relaxed reveal">
             Hẹn gặp bạn trong ngày đặc biệt nhất của chúng mình.
             <br />
             Sẽ thật hạnh phúc khi có bạn ở đó cùng sẻ chia niềm vui và chứng kiến khoảnh khắc ý nghĩa này.
           </p>
 
-          <div className="font-script text-4xl sm:text-5xl text-amber-200 mt-6">
+          <div className="font-script text-4xl sm:text-5xl text-amber-200 mt-6 reveal delay-100">
             Thank you with love!
           </div>
 
-          <div className="font-display font-bold text-xs uppercase tracking-[0.3em] text-white/70 mt-3">
+          <div className="font-display font-bold text-xs uppercase tracking-[0.3em] text-white/70 mt-3 reveal delay-200">
             Hồng Quân &amp; Thu Hiền • 28.11.2026
           </div>
         </div>

@@ -41,81 +41,234 @@
   font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* --- ENVELOPE 3D STYLES --- */
+/* =========================================================
+   SCROLL REVEAL ANIMATIONS (MATCHING DUC MANH & PUNPUN)
+========================================================= */
+.reveal {
+  opacity: 0;
+  transform: translateY(35px);
+  transition: opacity 0.9s cubic-bezier(0.25, 1, 0.5, 1), transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.in,
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delay classes */
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }
+.delay-500 { transition-delay: 500ms; }
+
+/* Drip animation for hero scroll indicator */
+@keyframes drip {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+    opacity: 0;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+    opacity: 0;
+  }
+}
+
+.animate-drip {
+  animation: drip 1.6s ease-in-out infinite;
+}
+
+/* =========================================================
+   OPENING SCREEN ANIMATIONS (BACKGROUND GLOW & MONOGRAM)
+========================================================= */
+.opening-glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(70px);
+  opacity: 0.35;
+}
+
+.glow-1 {
+  width: 280px;
+  height: 280px;
+  top: -100px;
+  left: -80px;
+  background: #9a3f48;
+  animation: glowMove1 8s ease-in-out infinite alternate;
+}
+
+.glow-2 {
+  width: 300px;
+  height: 300px;
+  right: -100px;
+  bottom: -100px;
+  background: #8c3440;
+  animation: glowMove2 10s ease-in-out infinite alternate;
+}
+
+.glow-3 {
+  width: 180px;
+  height: 180px;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  background: #b75b4e;
+  opacity: 0.15;
+  animation: centerGlow 5s ease-in-out infinite;
+}
+
+@keyframes glowMove1 {
+  from { transform: translate(0, 0); }
+  to { transform: translate(100px, 80px); }
+}
+
+@keyframes glowMove2 {
+  from { transform: translate(0, 0); }
+  to { transform: translate(-100px, -80px); }
+}
+
+@keyframes centerGlow {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(0.85);
+    opacity: 0.1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.35);
+    opacity: 0.22;
+  }
+}
+
+/* Opening elements staggered appearances */
+@keyframes openingFadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes openingNames {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes monogramAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.5) rotate(-30deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes hintBlink {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.95; }
+}
+
+.anim-opening-fade-down {
+  animation: openingFadeDown 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards;
+}
+
+.anim-opening-names {
+  animation: openingNames 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s forwards;
+}
+
+.anim-monogram-appear {
+  animation: monogramAppear 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.35s forwards;
+}
+
+.anim-hint-blink {
+  animation: hintBlink 2.4s ease-in-out infinite;
+}
+
+/* Decorative Flower Ornaments */
+.flower {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.flower span {
+  position: absolute;
+  width: 34px;
+  height: 50px;
+  left: 28px;
+  top: 18px;
+  border-radius: 50% 50% 45% 45%;
+  background: radial-gradient(circle at 50% 75%, #d9a08a 0%, #8c303d 45%, #4c111d 100%);
+  transform-origin: 50% 80%;
+}
+
+.flower span:nth-child(1) { transform: rotate(0deg); }
+.flower span:nth-child(2) { transform: rotate(72deg); }
+.flower span:nth-child(3) { transform: rotate(144deg); }
+.flower span:nth-child(4) { transform: rotate(216deg); }
+.flower span:nth-child(5) { transform: rotate(288deg); }
+
+.flower::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 37px;
+  top: 37px;
+  border-radius: 50%;
+  background: #d5a95e;
+  box-shadow: 0 0 12px rgba(218, 172, 91, 0.6);
+}
+
+.flower-top-left {
+  top: -14px;
+  left: -14px;
+  transform: rotate(-20deg);
+}
+
+.flower-bottom-right {
+  right: -14px;
+  bottom: -14px;
+  transform: rotate(160deg);
+}
+
+/* =========================================================
+   ENVELOPE 3D STYLES & INTERACTION
+========================================================= */
 .envelope-container {
   perspective: 1400px;
   transform-style: preserve-3d;
 }
 
-.envelope-box {
-  position: relative;
-  width: 320px;
-  height: 220px;
-  margin: 0 auto;
-  transform-style: preserve-3d;
-  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@media (min-width: 640px) {
-  .envelope-box {
-    width: 380px;
-    height: 250px;
-  }
-}
-
-/* Flap 3D transformation */
-.envelope-flap {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transform-origin: top center;
-  transform-style: preserve-3d;
-  transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 25;
-}
-
-.envelope-flap.is-open {
-  transform: rotateX(180deg);
-  z-index: 5;
-}
-
-/* Letter extraction animation */
-.envelope-letter {
-  position: absolute;
-  left: 5%;
-  right: 5%;
-  bottom: 8px;
-  height: 94%;
-  background: linear-gradient(135deg, #FFFCF9 0%, #F8F3ED 100%);
-  border-radius: 4px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  transform: translateY(0);
-  transition: transform 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s, z-index 0.01s 0.7s;
-  z-index: 10;
-}
-
-.envelope-letter.is-open {
-  transform: translateY(-90px);
-  z-index: 26;
-}
-
-@media (min-width: 640px) {
-  .envelope-letter.is-open {
-    transform: translateY(-115px);
-  }
-}
-
 /* Wax seal button pulsing */
 @keyframes sealPulse {
   0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 4px 15px rgba(122, 28, 41, 0.5), 0 0 0 0 rgba(197, 160, 89, 0.6);
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65), 0 0 0 0 rgba(218, 174, 104, 0.6);
   }
   50% {
-    transform: scale(1.06);
-    box-shadow: 0 6px 20px rgba(122, 28, 41, 0.7), 0 0 0 10px rgba(197, 160, 89, 0);
+    transform: translate(-50%, -50%) scale(1.06);
+    box-shadow: 0 8px 25px rgba(122, 28, 41, 0.8), 0 0 0 12px rgba(218, 174, 104, 0);
   }
 }
 
@@ -123,50 +276,47 @@
   animation: sealPulse 2.4s infinite ease-in-out;
 }
 
-/* Gentle floating envelope */
-@keyframes gentleFloat {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-8px) rotate(0.4deg);
-  }
-}
-
-.animate-gentle-float {
-  animation: gentleFloat 4s ease-in-out infinite;
-}
-
 /* Floating petals animation */
 @keyframes petalFall {
   0% {
-    transform: translateY(-10%) rotate(0deg) translateX(0);
+    transform: translateY(-20px) translateX(0) rotate(0deg);
     opacity: 0;
   }
   15% {
-    opacity: 0.8;
+    opacity: 0.75;
   }
   85% {
-    opacity: 0.8;
+    opacity: 0.75;
   }
   100% {
-    transform: translateY(110vh) rotate(360deg) translateX(80px);
+    transform: translateY(112vh) translateX(90px) rotate(360deg);
     opacity: 0;
+  }
+}
+
+@keyframes petalSway {
+  0%, 100% {
+    margin-left: -15px;
+  }
+  50% {
+    margin-left: 15px;
   }
 }
 
 .petal-fall {
-  animation: petalFall linear infinite;
+  animation: petalFall linear infinite, petalSway 3s ease-in-out infinite alternate;
 }
 
-/* Scroll reveal helper */
-.reveal-item {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.reveal-item.is-visible {
-  opacity: 1;
-  transform: translateY(0);
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

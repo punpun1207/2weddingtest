@@ -73,23 +73,47 @@ export const EnvelopeScreen: React.FC<EnvelopeScreenProps> = ({
         isFadingOut ? 'opacity-0 scale-105 pointer-events-none' : 'opacity-100'
       }`}
       style={{
-        background: 'radial-gradient(circle at 50% 35%, #55111a 0%, #2b050a 65%, #160205 100%)',
+        background: 'radial-gradient(circle at 50% 45%, rgba(125, 37, 49, 0.65), transparent 38%), radial-gradient(circle at 10% 10%, rgba(150, 70, 55, 0.25), transparent 25%), radial-gradient(circle at 90% 90%, rgba(150, 70, 55, 0.22), transparent 25%), linear-gradient(135deg, #21060c 0%, #3d0b15 45%, #25060d 100%)',
       }}
     >
-      {/* Floating ambient petals */}
+      {/* Animated background glowing spheres */}
+      <div className="opening-glow glow-1" />
+      <div className="opening-glow glow-2" />
+      <div className="opening-glow glow-3" />
+
+      {/* Decorative floral corners (from Duc Manh) */}
+      <div className="flower flower-top-left">
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
+      <div className="flower flower-bottom-right">
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
+
+      {/* Floating ambient petals with sway and rotation */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {[...Array(16)].map((_, i) => (
+        {[...Array(18)].map((_, i) => (
           <div
             key={i}
-            className="absolute rounded-full bg-rose-200/20 backdrop-blur-xs petal-fall"
+            className="absolute rounded-full petal-fall"
             style={{
-              width: `${10 + (i % 4) * 5}px`,
-              height: `${14 + (i % 3) * 6}px`,
-              left: `${(i * 7 + 3) % 96}%`,
-              top: `-${20 + (i % 5) * 10}px`,
-              animationDuration: `${6 + (i % 5) * 2.5}s`,
-              animationDelay: `${(i * 0.6) % 3.5}s`,
-              transform: `rotate(${i * 25}deg)`,
+              width: `${10 + (i % 4) * 4}px`,
+              height: `${14 + (i % 3) * 5}px`,
+              left: `${(i * 5.8 + 2) % 96}%`,
+              top: `-${25 + (i % 5) * 10}px`,
+              background: 'linear-gradient(135deg, #d99a82, #762534)',
+              opacity: 0.45,
+              borderRadius: '80% 20% 80% 20%',
+              animationDuration: `${7 + (i % 6) * 1.5}s`,
+              animationDelay: `${(i * 0.45) % 4}s`,
+              transform: `rotate(${i * 24}deg)`,
             }}
           />
         ))}
@@ -115,19 +139,25 @@ export const EnvelopeScreen: React.FC<EnvelopeScreenProps> = ({
       </div>
 
       {/* Main Container */}
-      <div className="relative w-full max-w-md flex flex-col items-center justify-center pt-10 pb-6">
-        {/* Header Script */}
+      <div className="relative w-full max-w-md flex flex-col items-center justify-center pt-8 pb-4">
+        {/* Header Script with Keyframe Entrance */}
         <div
-          className={`text-center mb-6 transition-all duration-700 ${
-            stage === 'card-focus' ? 'opacity-30 -translate-y-2' : 'opacity-100'
+          className={`text-center mb-5 transition-all duration-700 ${
+            stage === 'card-focus' ? 'opacity-25 -translate-y-2' : 'opacity-100'
           }`}
         >
-          <p className="font-script text-3xl sm:text-4xl text-amber-200/95 tracking-wide drop-shadow-md">
-            Trân trọng kính mời
-          </p>
-          <p className="font-serif italic text-white/75 text-xs sm:text-sm tracking-[0.25em] mt-1 uppercase">
-            Wedding Invitation
-          </p>
+          <div className="font-serif text-[11px] sm:text-xs tracking-[0.35em] text-[#e8d2bd] uppercase anim-opening-fade-down">
+            WEDDING INVITATION
+          </div>
+
+          {/* Monogram circle */}
+          <div className="w-12 h-12 rounded-full border border-amber-300/60 flex items-center justify-center mx-auto my-2 text-amber-200/90 font-serif italic text-xl shadow-lg anim-monogram-appear">
+            Q&amp;H
+          </div>
+
+          <div className="font-display text-2xl sm:text-3xl font-medium tracking-wider text-[#f8eee5] drop-shadow anim-opening-names uppercase">
+            HỒNG QUÂN <span className="font-script text-amber-200 text-3xl font-normal lowercase mx-1">&amp;</span> THU HIỀN
+          </div>
         </div>
 
         {/* 400x260 3D ENVELOPE */}
@@ -350,45 +380,41 @@ export const EnvelopeScreen: React.FC<EnvelopeScreenProps> = ({
             </div>
           </div>
 
-          {/* 5. CIRCULAR WAX SEAL */}
+          {/* 5. CIRCULAR WAX SEAL WITH PULSE ANIMATION */}
           <div
             onClick={(e) => {
               e.stopPropagation();
               handleOpen();
             }}
-            className={`absolute left-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer transition-all duration-500 z-25 ${
+            className={`absolute left-1/2 cursor-pointer transition-all duration-500 z-25 ${
               stage === 'sealed'
-                ? 'opacity-100 scale-100'
+                ? 'opacity-100 scale-100 wax-seal-pulse'
                 : 'opacity-0 scale-50 pointer-events-none'
             }`}
             style={{
               top: '56.9%',
-              width: '66px',
-              height: '66px',
+              width: '74px',
+              height: '74px',
             }}
             title="Chạm để mở thiệp"
           >
             <div
-              className={`w-full h-full rounded-full flex items-center justify-center relative shadow-2xl border-2 border-amber-300/40 select-none overflow-hidden ${
-                stage === 'sealed' ? 'wax-seal-pulse' : ''
-              }`}
+              className="w-full h-full rounded-full flex items-center justify-center relative shadow-2xl border-2 border-amber-300/50 select-none overflow-hidden"
               style={{
                 background: 'radial-gradient(circle at 35% 30%, #A42838 0%, #751724 55%, #440911 100%)',
-                boxShadow: '0 6px 20px rgba(0,0,0,0.65), inset 0 2px 4px rgba(255,255,255,0.3)',
               }}
             >
               <img
                 src="/images/sap.png"
                 alt="Wax Seal"
-                className="w-full h-full object-cover rounded-full"
+                className="w-full h-full object-cover rounded-full pointer-events-none"
                 onError={(e) => {
-                  // Fallback to stylized SVG seal if image fails
                   e.currentTarget.style.display = 'none';
                 }}
               />
               {/* Outer embossed ring */}
-              <div className="absolute inset-1 rounded-full border border-amber-300/30 pointer-events-none" />
-              {/* Monogram fallback / overlay */}
+              <div className="absolute inset-1 rounded-full border border-amber-300/40 pointer-events-none" />
+              {/* Monogram stamp */}
               <div className="absolute flex flex-col items-center justify-center text-amber-100 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] pointer-events-none">
                 <span className="font-display font-bold text-xs tracking-wider">Q&amp;H</span>
                 <Heart className="w-2.5 h-2.5 fill-amber-300 text-amber-300 mt-0.5" />
@@ -397,16 +423,21 @@ export const EnvelopeScreen: React.FC<EnvelopeScreenProps> = ({
           </div>
         </div>
 
-        {/* Action Button below envelope */}
-        <div className="mt-12 sm:mt-14 text-center z-30">
+        {/* Action Button & Hint below envelope */}
+        <div className="mt-10 text-center z-30 flex flex-col items-center gap-2">
           {stage === 'sealed' ? (
-            <button
-              onClick={handleOpen}
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 text-[#2B060A] font-semibold text-xs sm:text-sm tracking-widest uppercase shadow-lg shadow-amber-950/40 hover:brightness-110 active:scale-95 transition-all cursor-pointer font-sans"
-            >
-              <Sparkles className="w-4 h-4" />
-              Chạm vào thiệp để mở
-            </button>
+            <>
+              <button
+                onClick={handleOpen}
+                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 text-[#2B060A] font-semibold text-xs sm:text-sm tracking-widest uppercase shadow-lg shadow-amber-950/40 hover:brightness-110 active:scale-95 transition-all cursor-pointer font-sans"
+              >
+                <Sparkles className="w-4 h-4 animate-spin" style={{ animationDuration: '3s' }} />
+                Chạm vào thiệp để mở
+              </button>
+              <span className="text-amber-200/75 text-xs font-serif italic anim-hint-blink">
+                (Nhấn vào dấu niêm phong sáp để mở nha)
+              </span>
+            </>
           ) : stage === 'card-focus' ? (
             <button
               onClick={handleEnterSite}
@@ -416,8 +447,8 @@ export const EnvelopeScreen: React.FC<EnvelopeScreenProps> = ({
               <ChevronRight className="w-4 h-4 text-amber-300" />
             </button>
           ) : (
-            <div className="text-amber-100/75 font-serif italic text-sm tracking-wider flex items-center justify-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+            <div className="text-amber-100/80 font-serif italic text-sm tracking-wider flex items-center justify-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
               Đang mở thiệp mừng...
             </div>
           )}
